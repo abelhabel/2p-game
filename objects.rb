@@ -25,6 +25,7 @@ class Player
     @score += 1
   end
   def display
+    puts "-" * 20
     puts "#{@name}, has #{@score} points."
     puts "-" * 20
   end

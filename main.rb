@@ -6,28 +6,36 @@ require 'colorize'
 #init players
 @players = [Player.new('p1', 3, 0), Player.new('p2', 3, 0)]
 @turn = 0
+
+def print_wrong
+  puts "That's wrong!".red
+  @players[@turn].wrong_answer
+  puts "#{@players[@turn].get_name}: has #{@players[@turn].get_hp} HP left, and lost!" 
+  puts "#{@players[@turn-1].get_name}: has #{@players[@turn-1].get_hp} HP left, and won!"
+end
+def play_again()
+  puts "Do you want to play again? (Y/N)"
+end
+def new_game
+  @players[0].reset_hp
+  @players[1].reset_hp
+  @players[@turn-1].increase_score
+  @players.each{|x| x.display}
+end
 def repl
-  
   numbers = get_question()
-  puts numbers
   puts "Player: #{@players[@turn].get_name}, what is : #{numbers[0]} + #{numbers[1]}?"
   reply = gets.chomp.to_i
   if reply == numbers[0] + numbers[1]
     puts "Correct".green
   else
-    puts "That's wrong!".red
-    @players[@turn].wrong_answer
-    puts "#{@players[@turn].get_name}: has #{@players[@turn].get_hp} HP left, and lost!" 
-    puts "#{@players[@turn-1].get_name}: has #{@players[@turn-1].get_hp} HP left, and won!"
+    print_wrong
     if @players[@turn].get_hp <= 0
       play_again()
       if gets.chomp.downcase == 'n'
         return
       else
-        @players[0].reset_hp
-        @players[1].reset_hp
-        @players[@turn-1].increase_score
-        @players.each{|x| x.display}
+        new_game
       end
     end
   end
