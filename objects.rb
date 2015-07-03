@@ -5,13 +5,7 @@ class Player
     @hp = hp
     @score = score
   end  
-  
-  def set_name(name)
-    @name = name
-  end
-  def get_name
-    @name
-  end
+  attr_accessor :name
   def wrong_answer
     @hp -= 1
   end
