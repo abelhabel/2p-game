@@ -1,23 +1,28 @@
 class Player  
-  def initialize(name, hp, score)  
+
+  DEFAULT_HP = 3
+
+  attr_reader :name, :score, :hp #reader
+
+  def initialize(name, hp = DEFAULT_HP, score = 0)  
     # Instance variables  
     @name = name 
     @hp = hp
-    @score = score
+    @score = score #games_won
   end  
-  attr_accessor :name
-  attr_accessor :score
-  def reduce_hp!
+
+  def reduce_hp
     @hp -= 1
   end
-  def get_hp
-    @hp
+
+  def reset_hp
+    @hp = DEFAULT_HP
   end
-  def reset_hp!
-    @hp = 3
-  end
-  def increase_score!
+
+  def increase_score
     @score += 1
   end
+
+
 
 end 

@@ -1,6 +1,6 @@
 require 'colorize'
 require './game.rb'
-
+require './tournament'
 def games_loop(game)
   game.main_loop!
 
@@ -31,8 +31,12 @@ def run
   puts "Player 2, please input your name:"
   p2name = gets.chomp
   print_rules
-  game = Game.new(p1name, p2name)
-  games_loop(game)
+  tournament = Tournament.new(p1name, p2name)
+  if tournament.new_game
+    tournament.new_game
+  end
+  # game = Game.new(p1name, p2name)
+  # games_loop(game)
 end
 
 run

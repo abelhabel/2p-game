@@ -2,27 +2,27 @@ require './player.rb'
 require './logic.rb'
 
 class Game
-  def initialize(p1name, p2name)
-    @players = [Player.new(p1name,3,0), Player.new(p2name,3,0)]
-    @turn = 0
+  def initialize(players)
+    @players = players
+    @whos_turn = 0 #
   end
 
   def active_player
-    @players[@turn]
+    @players[@whos_turn]
   end
 
   def inactive_player
-    @players[@turn-1]
+    @players[@whos_turn-1]
   end
 
-  def next_player!
-    @turn = @turn == 0 ? 1 : 0
+  def next_player
+    @whos_turn = @whos_turn == 0 ? 1 : 0
   end
 
   def print_wrong
     puts "That's wrong!".red
-    puts "#{active_player.name}: has #{active_player.get_hp} HP left, and lost!" 
-    puts "#{inactive_player.name}: has #{inactive_player.get_hp} HP left, and won!"
+    puts "#{active_player.name}: has #{active_player.hp} HP left, and lost!" 
+    puts "#{inactive_player.name}: has #{inactive_player.hp} HP left, and won!"
   end
 
   def print_correct
@@ -48,10 +48,10 @@ class Game
     if answer == numbers[0] + numbers[1]
       print_correct
     else
-      active_player.reduce_hp!
+      active_player.reduce_hp
       print_wrong
-      puts "Player hp #{active_player.get_hp}!"
-      if active_player.get_hp <= 0
+      puts "Player hp #{active_player.hp}!"
+      if active_player.hp <= 0
         return false
       end
     end
@@ -59,15 +59,15 @@ class Game
   end
 
   def main_loop!
-    numbers = Logic.get_question()
-    puts "Player: #{active_player.name}, what is: #{numbers[0]} + #{numbers[1]}?"
-    reply = gets.chomp.to_i
-    if check_answer!(reply, numbers)
-      next_player!
-      main_loop!
-    else
-      return
+    while active_player.hp > 0 && inactive_player.hp > 0
+      numbers = Logic.get_question()
+      puts "Player: #{active_player.name}, what is: #{numbers[0]} + #{numbers[1]}?"
+      reply = gets.chomp.to_i
+      if check_answer!(reply, numbers)
+        next_player
+      end
     end
+    inactive_player.increase_score
 
   end
   
