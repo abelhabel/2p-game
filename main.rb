@@ -1,6 +1,7 @@
 require 'colorize'
 require './game.rb'
 require './tournament'
+
 def games_loop(game)
   game.main_loop!
 
@@ -26,10 +27,20 @@ end
 
 def run
   #prompt for player names and set them
-  puts "Player 1, please input your name:"
-  p1name = gets.chomp
-  puts "Player 2, please input your name:"
-  p2name = gets.chomp
+  
+  repeat = true
+  p1name = ''
+  p2name = ''
+  loop do
+    puts "Player 1, please input your name:"
+    p1name = gets.chomp.strip
+    break if p1name != ''
+  end
+  loop do
+    puts "Player 2, please input your name:"
+    p2name = gets.chomp.strip
+    break if p2name != ''
+  end
   print_rules
   tournament = Tournament.new(p1name, p2name)
   if tournament.new_game

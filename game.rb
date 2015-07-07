@@ -1,5 +1,6 @@
 require './player.rb'
 require './questions.rb'
+require './invalidguess'
 class Game
   def initialize(players)
     @players = players
@@ -51,16 +52,18 @@ class Game
 
   def main_loop!
     while active_player.hp > 0 && inactive_player.hp > 0
-      numbers = Question.question
+      numbers = Question.question 
       puts "Player: #{active_player.name}, what is: #{numbers[0]} + #{numbers[1]}?"
-      reply = gets.chomp.to_i
-      if check_answer!(reply, numbers)
-        print_correct
-      else
-        active_player.reduce_hp
-        print_wrong
+      reply = gets.chomp
+      if InvalidGuessError.validate(reply) != false
+        if check_answer!(reply.to_i, numbers)
+          print_correct
+        else
+          active_player.reduce_hp
+          print_wrong
+        end
+        next_player
       end
-      next_player
     end
     inactive_player.increase_score
 
