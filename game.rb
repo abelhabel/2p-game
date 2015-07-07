@@ -1,6 +1,5 @@
 require './player.rb'
-require './logic.rb'
-
+require './questions.rb'
 class Game
   def initialize(players)
     @players = players
@@ -21,6 +20,9 @@ class Game
 
   def print_wrong
     puts "That's wrong!".red
+  end
+
+  def print_hp
     puts "#{active_player.name}: has #{active_player.hp} HP left, and lost!" 
     puts "#{inactive_player.name}: has #{inactive_player.hp} HP left, and won!"
   end
@@ -44,28 +46,21 @@ class Game
   end
 
   def check_answer!(answer, numbers)
-    return_str = ''
-    if answer == numbers[0] + numbers[1]
-      print_correct
-    else
-      active_player.reduce_hp
-      print_wrong
-      puts "Player hp #{active_player.hp}!"
-      if active_player.hp <= 0
-        return false
-      end
-    end
-    return true
+    answer == numbers[0] + numbers[1]
   end
 
   def main_loop!
     while active_player.hp > 0 && inactive_player.hp > 0
-      numbers = Logic.get_question()
+      numbers = Question.question
       puts "Player: #{active_player.name}, what is: #{numbers[0]} + #{numbers[1]}?"
       reply = gets.chomp.to_i
       if check_answer!(reply, numbers)
-        next_player
+        print_correct
+      else
+        active_player.reduce_hp
+        print_wrong
       end
+      next_player
     end
     inactive_player.increase_score
 
